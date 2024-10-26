@@ -6,7 +6,7 @@
 /*   By: ouel-bou <ouel-bou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 00:21:17 by ouel-bou          #+#    #+#             */
-/*   Updated: 2024/10/26 15:41:41 by ouel-bou         ###   ########.fr       */
+/*   Updated: 2024/10/26 16:34:22 by ouel-bou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,28 +15,29 @@
 void	exec_list(t_data *data)
 {
 	t_cmdl	*cmd;
+	t_cmdl	*tmp;
 	char	**env_arr;
+	int		exit;
 	int		i;
 
 	cmd = data->cmd_list;
+	tmp = cmd;
 	env_arr = ft_ltoa(data->envl);
-	cmd->exit = -1;
+	exit = -1;
 	i = 0;
 	data->pipes = create_pipes(data->cmds_nbr);
 	data->pids = fork_n(data->cmds_nbr);
-	while (i < data->cmds_nbr)
+	while (i < data->cmds_nbr && tmp)
 	{
-		if (is_builtin(cmd->cmd) && is_parent(data->pids, data->cmds_nbr))
-			cmd->exit = exec_builtin(cmd, data, data->envl, &i);
-		else if (!is_builtin(cmd->cmd) && !data->pids[i])
-			exec_cmd(cmd, data, env_arr, &i);
-		cmd = cmd->next;
+		if (is_builtin(tmp->cmd) && is_parent(data->pids, data->cmds_nbr))
+			cmd->exit = exec_builtin(tmp, data, data->envl, &i);
+		else if (!is_builtin(tmp->cmd) && !data->pids[i])
+			exec_cmd(tmp, data, env_arr, &i);
+		tmp = tmp->next;
 		i++;
 	}
-	printf("test\n");
-	// cmd->exit = wait_for_childs(data->pids, data->cmds_nbr);
+	exit = wait_for_childs(data->pids, data->cmds_nbr);
 	close_all_pipes(data->pipes, data->cmds_nbr);
-	printf("test\n");
 }
 
 void	exec_cmd(t_cmdl *cmd, t_data *data, char **env, int *pos)

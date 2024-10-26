@@ -6,7 +6,7 @@
 /*   By: ouel-bou <ouel-bou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 22:44:55 by ouel-bou          #+#    #+#             */
-/*   Updated: 2024/09/25 00:03:16 by ouel-bou         ###   ########.fr       */
+/*   Updated: 2024/10/26 16:32:17 by ouel-bou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	wait_for_childs(pid_t *pids, int cmds_nbr)
 	last_exit = -1;
 	while (i < cmds_nbr)
 	{
-		waitpid(pids[i], &status, 0);
+		waitpid(-1, &status, 0);
 		if (WIFEXITED(status) && last_exit <= 0)
 			last_exit = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status) && last_exit <= 0)

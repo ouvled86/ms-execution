@@ -6,7 +6,7 @@
 /*   By: ouel-bou <ouel-bou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 23:43:33 by ouel-bou          #+#    #+#             */
-/*   Updated: 2024/10/26 15:32:36 by ouel-bou         ###   ########.fr       */
+/*   Updated: 2024/10/26 16:27:06 by ouel-bou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ char	*find_bin(char *cmd, char **env)
 	char	**path_list;
 
 	i = 0;
-	while (env[i] && !ft_strncmp(env[i], "PATH=", 5))
+	while (env[i] && ft_strncmp(env[i], "PATH=", 5))
 		i++;
 	path_list = extract_paths(env[i]);
 	ret = find_path(path_list, cmd);

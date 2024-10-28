@@ -6,7 +6,7 @@
 /*   By: ouel-bou <ouel-bou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 00:21:17 by ouel-bou          #+#    #+#             */
-/*   Updated: 2024/10/26 16:34:22 by ouel-bou         ###   ########.fr       */
+/*   Updated: 2024/10/28 23:09:37 by ouel-bou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,16 @@ void	exec_list(t_data *data)
 	i = 0;
 	data->pipes = create_pipes(data->cmds_nbr);
 	data->pids = fork_n(data->cmds_nbr);
-	while (i < data->cmds_nbr && tmp)
+	while (i < data->cmds_nbr && cmd)
 	{
-		if (is_builtin(tmp->cmd) && is_parent(data->pids, data->cmds_nbr))
-			cmd->exit = exec_builtin(tmp, data, data->envl, &i);
-		else if (!is_builtin(tmp->cmd) && !data->pids[i])
-			exec_cmd(tmp, data, env_arr, &i);
-		tmp = tmp->next;
+		if (is_builtin(cmd->cmd) && is_parent(data->pids, data->cmds_nbr))
+			cmd->exit = exec_builtin(cmd, data, data->envl, &i);
+		else if (!is_builtin(cmd->cmd) && !data->pids[i])
+			exec_cmd(cmd, data, env_arr, &i);
+		cmd = cmd->next;
 		i++;
 	}
-	exit = wait_for_childs(data->pids, data->cmds_nbr);
+	// exit = wait_for_childs(data->pids, data->cmds_nbr);
 	close_all_pipes(data->pipes, data->cmds_nbr);
 }
 
@@ -60,23 +60,30 @@ int	main(int ac, char **av, char **env)
 {
 	t_data	*data;
 	t_cmdl	*cmdl;
+	t_cmdl	*cmdl2;
 	t_env	*envl;
 
 	data = (t_data *)malloc(sizeof(t_data));
 	cmdl = (t_cmdl *)malloc(sizeof(t_cmdl));
+	cmdl2 = (t_cmdl *)malloc(sizeof(t_cmdl));
 	envl = initialize_env(env);
 	data->envl = envl;
-	// while (envl)
-	// {
-	// 	printf("Var: %s, val: %s\n", envl->env_var, envl->env_value);
-	// 	envl = envl->next;
-	// }
-	data->cmds_nbr = 1;
+	data->cmds_nbr = 2;
 	data->pids = NULL;
 	data->pipes = NULL;
-	cmdl->next = NULL;
+	cmdl2->next = NULL;
+	cmdl2->redir = (t_redir *)malloc(sizeof(t_redir));
+	cmdl2->redir->direction = ft_strdup("text.txt");
+	cmdl2->redir->redirection = ft_strdup(">");
+	cmdl2->redir->next = NULL;
+	cmdl2->cmd = ft_strdup("cat");
+	cmdl2->ldlm = NULL;
+	cmdl2->args = (char **)malloc(sizeof(char *) * 2);
+	cmdl2->args[0] = ft_strdup("cat");
+	cmdl2->args[1] = NULL;
+	cmdl->next = cmdl2;
 	cmdl->cmd = ft_strdup("ls");
-	cmdl->ldlm = NULL;
+	cmdl->ldlm = ft_strdup("|");
 	cmdl->args = (char **)malloc(sizeof(char *) * 3);
 	cmdl->args[0] = ft_strdup("ls");
 	cmdl->args[1] = ft_strdup("-la");

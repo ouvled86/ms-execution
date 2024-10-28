@@ -6,7 +6,7 @@
 /*   By: ouel-bou <ouel-bou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 00:42:24 by ouel-bou          #+#    #+#             */
-/*   Updated: 2024/10/26 15:38:47 by ouel-bou         ###   ########.fr       */
+/*   Updated: 2024/10/28 22:17:41 by ouel-bou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	**create_pipes(int cmds_nbr)
 		perror("malloc");
 		return (NULL);
 	}
-	while (i < cmds_nbr - 1)
+	while (i < cmds_nbr)
 	{
 		pipes[i] = (int *)malloc(2 * sizeof(int));
 		if (!pipes[i])

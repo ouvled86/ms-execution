@@ -6,7 +6,7 @@
 /*   By: ouel-bou <ouel-bou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 00:40:15 by ouel-bou          #+#    #+#             */
-/*   Updated: 2024/09/26 00:34:46 by ouel-bou         ###   ########.fr       */
+/*   Updated: 2024/10/28 23:40:47 by ouel-bou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	handle_rout(char *file)
 	out_fd = -1;
 	if (*file)
 	{
-		out_fd = open(file, O_CREAT | O_TRUNC | O_WRONLY);
+		out_fd = open(file, O_CREAT | O_TRUNC | O_WRONLY, 0666);
 		if (out_fd < 0)
 			perror("open");
 	}
@@ -33,7 +33,7 @@ int	handle_rin(char *file)
 	in_fd = -1;
 	if (*file)
 	{
-		in_fd = open(file, O_RDONLY);
+		in_fd = open(file, O_RDONLY, 0666);
 		if (in_fd < 0)
 			perror("open");
 	}
@@ -47,7 +47,7 @@ int	handle_routa(char *file)
 	out_fd = -1;
 	if (*file)
 	{
-		out_fd = open(file, O_CREAT | O_APPEND | O_WRONLY);
+		out_fd = open(file, O_CREAT | O_APPEND | O_RDWR, 0666);
 		if (out_fd < 0)
 			perror("open");
 	}
@@ -87,13 +87,13 @@ void	handle_rio(t_redir *redirs)
 	out_fd = -1;
 	while (temp)
 	{
-		if (ft_strncmp(temp->redirection, ">", 2))
+		if (!ft_strncmp(temp->redirection, ">", 2))
 			out_fd = handle_rout(temp->direction);
-		else if (ft_strncmp(temp->redirection, "<", 2))
+		else if (!ft_strncmp(temp->redirection, "<", 2))
 			in_fd = handle_rin(temp->direction);
-		else if (ft_strncmp(temp->redirection, ">>", 2))
+		else if (!ft_strncmp(temp->redirection, ">>", 3))
 			out_fd = handle_routa(temp->direction);
-		else if (ft_strncmp(temp->redirection, "<<", 2))
+		else if (!ft_strncmp(temp->redirection, "<<", 3))
 			in_fd = handle_rhdoc(temp->direction);
 		if (in_fd > 0)
 			safe_dup2_close(in_fd, STDIN_FILENO);

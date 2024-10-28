@@ -6,7 +6,7 @@
 /*   By: ouel-bou <ouel-bou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 23:43:33 by ouel-bou          #+#    #+#             */
-/*   Updated: 2024/10/26 16:27:06 by ouel-bou         ###   ########.fr       */
+/*   Updated: 2024/10/28 21:52:52 by ouel-bou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,10 @@ pid_t	*fork_n(int cmds_nbr)
 		return (NULL);
 	}
 	while (i < cmds_nbr)
-		pids[i++] = 1;
+	{
+		pids[i] = 2;
+		i++;
+	}
 	i = 0;
 	while (i < cmds_nbr)
 	{
